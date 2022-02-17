@@ -2,7 +2,7 @@ const {
   NODE_ENV,
   SALT_ROUNDS,
   JWT_SECRET,
-  DB_NAME
+  DB_NAME,
 } = process.env;
 
 let secrets;
