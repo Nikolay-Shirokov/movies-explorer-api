@@ -4,8 +4,7 @@ const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-const { createUser, login } = require('./controllers/users');
-const { validateNewUserData, validateAuthData } = require('./middlewares/validation');
+
 const auth = require('./middlewares/auth');
 const { centralErrorHandler, NotFoundError } = require('./utils/errors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -27,19 +26,16 @@ app.use(requestLogger);
 app.use(cookieParser());
 app.use(cors());
 
-app.post('/api/signin', validateAuthData, login);
-app.post('/api/signup', validateNewUserData, createUser);
+app.use(require('./routes/auth'));
 
 // авторизация
 app.use(auth);
 
 // Подключение маршрутизации
-app.use('/api/users', require('./routes/users'));
-app.use('/api/movies', require('./routes/movies'));
+app.use(require('./routes/users'));
+app.use(require('./routes/movies'));
 
-app.get('/api/signout', (req, res) => {
-  res.status(200).clearCookie('jwt').send({ message: 'Выход' });
-});
+app.use(require('./routes/signout'));
 
 // Обработка неопределенных маршрутов
 app.use('/', (req, res, next) => next(new NotFoundError('Запрашиваемая страница не найдена')));
