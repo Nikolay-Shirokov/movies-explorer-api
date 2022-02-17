@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 const auth = require('./middlewares/auth');
 const { centralErrorHandler, NotFoundError } = require('./utils/errors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const { DB_NAME } = require('./middlewares/secrets');
 
 // Скажем нет захардкоженным данным
 require('dotenv').config();
@@ -50,7 +51,7 @@ app.use((err, req, res, next) => {
 });
 
 // Подключение к серверу mongo
-mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
+mongoose.connect(`mongodb:${DB_NAME}`, {
   useNewUrlParser: true,
 })
   .then(() => console.log('Connected to DB'))
