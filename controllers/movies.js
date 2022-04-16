@@ -29,13 +29,13 @@ module.exports.getMovies = (req, res, next) => {
 module.exports.deleteMovieByID = (req, res, next) => {
   const movieId = req.params.id;
 
-  Movie.findById(movieId)
+  Movie.findOne({movieId: movieId})
     .then((movie) => {
       checkDataFound(movie, ERROR_MESSAGE.notFound);
       if (movie.owner._id.toString() !== req.user._id) {
         throw new ForbiddenError('Запрещено удалять чужие фильмы');
       }
-      return Movie.findByIdAndRemove(movieId)
+      return Movie.findOneAndRemove({movieId: movieId})
         .populate(['owner']);
     })
     .then((movie) => {
