@@ -19,7 +19,7 @@ module.exports.createMovie = (req, res, next) => {
 
 module.exports.getMovies = (req, res, next) => {
   Movie.find({ owner: req.user._id })
-    .populate(['owner'])
+/*     .populate(['owner']) */
     .then((movies) => {
       res.send(movies);
     })
@@ -36,7 +36,7 @@ module.exports.deleteMovieByID = (req, res, next) => {
         throw new ForbiddenError('Запрещено удалять чужие фильмы');
       }
       return Movie.findOneAndRemove({movieId: movieId})
-        .populate(['owner']);
+/*         .populate(['owner']); */
     })
     .then((movie) => {
       checkDataFound(movie, ERROR_MESSAGE.notFound);
